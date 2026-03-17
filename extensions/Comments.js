@@ -8,7 +8,7 @@
 (function (Scratch) {
   "use strict";
 
-  class NbComments {
+  class NBComments {
     getInfo() {
       return {
         id: "comments",
@@ -141,5 +141,5 @@
     }
   }
 
-  Scratch.extensions.register(new NbComments());
+  Scratch.extensions.register(new NBComments());
 })(Scratch);
