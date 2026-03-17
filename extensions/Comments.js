@@ -1,7 +1,6 @@
 // Name: Comments
-// ID: cubesterNbComments
+// ID: comments
 // Description: Organize and label your code.
-// By: CubesterYT <https://scratch.mit.edu/users/CubesterYT/>
 // License: MPL-2.0
 
 // Version V.1.0.0
@@ -12,7 +11,7 @@
   class NbComments {
     getInfo() {
       return {
-        id: "cubesterNbComments",
+        id: "comments",
         name: Scratch.translate("Comments"),
         color1: "#E4DB8C",
         color2: "#C6BE79",
