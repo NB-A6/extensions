@@ -131,15 +131,15 @@
     }
 
     boolean({ VALUE }) {
-      return VALUE || false;
+      return Scratch.Cast.toBoolean(VALUE);
     }
 
     object({ VALUE }) {
-      return VALUE || {};
+      return Scratch.Cast.toObject(VALUE);
     }
 
     array({ VALUE }) {
-      return VALUE || [];
+      return Scratch.Cast.toArray(VALUE);
     }
   }
 
