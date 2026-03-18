@@ -17,6 +17,7 @@
         color2: "#C6BE79",
         color3: "#A8A167",
         blocks: [
+          /* eslint-disable extension/should-translate */
           {
             opcode: "hat",
             blockType: Scratch.BlockType.HAT,
@@ -25,9 +26,9 @@
             arguments: {
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "command",
@@ -36,9 +37,9 @@
             arguments: {
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "loop",
@@ -47,9 +48,9 @@
             arguments: {
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "reporter",
@@ -58,13 +59,13 @@
             arguments: {
               VALUE: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
+                defaultValue: "",
               },
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "boolean",
@@ -72,13 +73,13 @@
             text: "[VALUE] // [COMMENT]",
             arguments: {
               VALUE: {
-                type: Scratch.ArgumentType.BOOLEAN
+                type: Scratch.ArgumentType.BOOLEAN,
               },
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "object",
@@ -86,13 +87,13 @@
             text: "[VALUE] // [COMMENT]",
             arguments: {
               VALUE: {
-                type: Scratch.ArgumentType.OBJECT
+                type: Scratch.ArgumentType.OBJECT,
               },
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
+                defaultValue: "",
+              },
+            },
           },
           {
             opcode: "array",
@@ -100,15 +101,16 @@
             text: "[VALUE] // [COMMENT]",
             arguments: {
               VALUE: {
-                type: Scratch.ArgumentType.ARRAY
+                type: Scratch.ArgumentType.ARRAY,
               },
               COMMENT: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: ""
-              }
-            }
-          }
-        ]
+                defaultValue: "",
+              },
+            },
+          },
+          /* eslint-enable extension/should-translate */
+        ],
       };
     }
 
