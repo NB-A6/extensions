@@ -4,7 +4,7 @@
 // By: ddededodediamante <https://github.com/ddededodediamante/>
 // License: MPL-2.0
 
-// Version V.1.1.0
+// Version V.1.2.0
 
 (function (Scratch) {
   "use strict";
@@ -157,7 +157,9 @@
           },
           {
             opcode: "rotate",
-            text: Scratch.translate("rotate [VEC] in axes [I] [J] by [A] degrees"),
+            text: Scratch.translate(
+              "rotate [VEC] in axes [I] [J] by [A] degrees"
+            ),
             blockType: Scratch.BlockType.ARRAY,
             arguments: {
               VEC: { type: Scratch.ArgumentType.ARRAY },
@@ -240,6 +242,10 @@
       };
     }
 
+    _map(a, func) {
+      return Scratch.Cast.toFloat32Array(a).slice().map(func);
+    }
+
     _map2(a, b, func) {
       a = Scratch.Cast.toFloat32Array(a);
       b = Scratch.Cast.toFloat32Array(b);
@@ -247,25 +253,6 @@
       return Float32Array.from({ length }, (_, i) =>
         func(a[i] ?? 0, b[i] ?? 0)
       );
-    }
-
-    _mapMut(v, func) {
-      v = Scratch.Cast.toFloat32Array(v);
-      for (let i = 0; i < v.length; i++) v[i] = func(v[i]);
-      return v;
-    }
-
-    _map2Mut(a, b, func) {
-      a = Scratch.Cast.toFloat32Array(a);
-      b = Scratch.Cast.toFloat32Array(b);
-      if (b.length > a.length) {
-        const result = new Float32Array(b.length);
-        for (let i = 0; i < b.length; i++)
-          result[i] = func(a[i] ?? 0, b[i]);
-        return result;
-      }
-      for (let i = 0; i < a.length; i++) a[i] = func(a[i], b[i] ?? 0);
-      return a;
     }
 
     vector2D(args) {
@@ -300,7 +287,7 @@
     }
 
     setComponent(args) {
-      const v = Scratch.Cast.toFloat32Array(args.VEC);
+      const v = Scratch.Cast.toFloat32Array(args.VEC).slice();
       const i = Math.floor(Scratch.Cast.toNumber(args.I));
       const val = Scratch.Cast.toNumber(args.V);
       if (i < 0) return v;
@@ -315,27 +302,27 @@
     }
 
     add(args) {
-      return this._map2Mut(args.A, args.B, (x, y) => x + y);
+      return this._map2(args.A, args.B, (x, y) => x + y);
     }
 
     subtract(args) {
-      return this._map2Mut(args.A, args.B, (x, y) => x - y);
+      return this._map2(args.A, args.B, (x, y) => x - y);
     }
 
     scale(args) {
       const s = Scratch.Cast.toNumber(args.S);
-      return this._mapMut(args.VEC, (x) => x * s);
+      return this._map(args.VEC, (x) => x * s);
     }
 
     divide(args) {
       const s = Scratch.Cast.toNumber(args.S);
-      if (s === 0) return this._mapMut(args.VEC, () => 0);
-      return this._mapMut(args.VEC, (x) => x / s);
+      if (s === 0) return this._map(args.VEC, () => 0);
+      return this._map(args.VEC, (x) => x / s);
     }
 
     lerp(args) {
       const t = Scratch.Cast.toNumber(args.T);
-      return this._map2Mut(args.A, args.B, (a, b) => a + (b - a) * t);
+      return this._map2(args.A, args.B, (a, b) => a + (b - a) * t);
     }
 
     magnitude(args) {
@@ -358,7 +345,7 @@
     }
 
     rotate2D(args) {
-      const v = Scratch.Cast.toFloat32Array(args.VEC);
+      const v = Scratch.Cast.toFloat32Array(args.VEC).slice();
       const rad = Scratch.Cast.toNumber(args.A) * (Math.PI / 180);
       const cos = Math.cos(rad);
       const sin = Math.sin(rad);
@@ -370,7 +357,7 @@
     }
 
     rotate(args) {
-      const v = Scratch.Cast.toFloat32Array(args.VEC);
+      const v = Scratch.Cast.toFloat32Array(args.VEC).slice();
       const i = Math.floor(Scratch.Cast.toNumber(args.I));
       const j = Math.floor(Scratch.Cast.toNumber(args.J));
       const rad = Scratch.Cast.toNumber(args.A) * (Math.PI / 180);
@@ -386,30 +373,26 @@
     vectorTransform(args) {
       switch (args.OP) {
         case "normalize": {
-          const v = Scratch.Cast.toFloat32Array(args.VEC);
-          let sum = 0;
-          for (let i = 0; i < v.length; i++) sum += v[i] * v[i];
-          const mag = Math.sqrt(sum);
-          if (mag === 0) return this._mapMut(args.VEC, () => 0);
-          for (let i = 0; i < v.length; i++) v[i] /= mag;
-          return v;
+          const mag = this.magnitude({ VEC: args.VEC });
+          if (mag === 0) return this._map(args.VEC, () => 0);
+          return this._map(args.VEC, (x) => x / mag);
         }
         case "absolute":
-          return this._mapMut(args.VEC, Math.abs);
+          return this._map(args.VEC, Math.abs);
         case "negate":
-          return this._mapMut(args.VEC, (x) => -x);
+          return this._map(args.VEC, (x) => -x);
         case "floor":
-          return this._mapMut(args.VEC, Math.floor);
+          return this._map(args.VEC, Math.floor);
         case "ceil":
-          return this._mapMut(args.VEC, Math.ceil);
+          return this._map(args.VEC, Math.ceil);
         case "round":
-          return this._mapMut(args.VEC, Math.round);
+          return this._map(args.VEC, Math.round);
       }
     }
 
     clampMagnitude(args) {
       const max = Scratch.Cast.toNumber(args.MAX);
-      const v = Scratch.Cast.toFloat32Array(args.VEC);
+      const v = Scratch.Cast.toFloat32Array(args.VEC).slice();
       let sum = 0;
       for (let i = 0; i < v.length; i++) sum += v[i] * v[i];
       const mag = Math.sqrt(sum);
@@ -422,11 +405,6 @@
     swizzle(args) {
       const v = Scratch.Cast.toFloat32Array(args.VEC);
       const indices = Scratch.Cast.toFloat32Array(args.INDICES);
-      if (indices.length === v.length) {
-        const tmp = Float32Array.from(indices, (i) => v[i] ?? 0);
-        v.set(tmp);
-        return v;
-      }
       return Float32Array.from(indices, (i) => v[i] ?? 0);
     }
 
