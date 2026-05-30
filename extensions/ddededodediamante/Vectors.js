@@ -208,6 +208,16 @@
               B: { type: Scratch.ArgumentType.ARRAY },
             },
           },
+          {
+            opcode: "vectorCompare",
+            text: Scratch.translate("[A] [OP] [B]"),
+            blockType: Scratch.BlockType.BOOLEAN,
+            arguments: {
+              A: { type: Scratch.ArgumentType.ARRAY },
+              OP: { type: Scratch.ArgumentType.STRING, menu: "vectorCompare" },
+              B: { type: Scratch.ArgumentType.ARRAY },
+            },
+          },
         ],
         menus: {
           vectorOp: {
@@ -225,6 +235,17 @@
                 text: Scratch.translate("angle between"),
                 value: "angle between",
               },
+            ],
+          },
+          vectorCompare: {
+            acceptReporters: false,
+            items: [
+              { text: Scratch.translate("<"), value: "<" },
+              { text: Scratch.translate("≤"), value: "<=" },
+              { text: Scratch.translate(">"), value: ">" },
+              { text: Scratch.translate("≥"), value: ">=" },
+              { text: Scratch.translate("="), value: "=" },
+              { text: Scratch.translate("≠"), value: "!=" },
             ],
           },
           vectorTransform: {
@@ -406,6 +427,27 @@
       const v = Scratch.Cast.toFloat32Array(args.VEC);
       const indices = Scratch.Cast.toFloat32Array(args.INDICES);
       return Float32Array.from(indices, (i) => v[i] ?? 0);
+    }
+
+    vectorCompare(args) {
+      const magA = this.magnitude({ VEC: args.A });
+      const magB = this.magnitude({ VEC: args.B });
+      switch (args.OP) {
+        case "<":
+          return magA < magB;
+        case "<=":
+          return magA <= magB;
+        case ">":
+          return magA > magB;
+        case ">=":
+          return magA >= magB;
+        case "=":
+          return magA === magB;
+        case "!=":
+          return magA !== magB;
+        default:
+          return false;
+      }
     }
 
     vectorOp(args) {
