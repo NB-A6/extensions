@@ -9,6 +9,8 @@
 (function (Scratch) {
   "use strict";
 
+  const runtime = Scratch.vm.runtime;
+
   class Vectors {
     getInfo() {
       return {
@@ -199,6 +201,7 @@
               A: { type: Scratch.ArgumentType.NUMBER, defaultValue: 90 },
             },
           },
+          "---",
           {
             opcode: "vectorTransform",
             text: Scratch.translate("[OP]\u200b[VEC]"),
@@ -238,6 +241,35 @@
               A: { type: Scratch.ArgumentType.ARRAY },
               B: { type: Scratch.ArgumentType.ARRAY },
             },
+          },
+          "---",
+          {
+            opcode: "setPosition",
+            text: Scratch.translate("set position to [VEC]"),
+            blockType: Scratch.BlockType.COMMAND,
+            arguments: {
+              VEC: { type: Scratch.ArgumentType.ARRAY },
+            },
+            color1: "#4c97ff",
+          },
+          {
+            opcode: "pointTowards",
+            text: Scratch.translate("point towards [VEC]"),
+            blockType: Scratch.BlockType.COMMAND,
+            arguments: {
+              VEC: { type: Scratch.ArgumentType.ARRAY },
+            },
+            color1: "#4c97ff",
+          },
+          {
+            opcode: "setStretch",
+            text: Scratch.translate("set stretch to [VEC]"),
+            blockType: Scratch.BlockType.COMMAND,
+            arguments: {
+              VEC: { type: Scratch.ArgumentType.ARRAY },
+            },
+            color1: "#4287f5",
+            hideFromPalette: !runtime.extensionManager?.isExtensionLoaded("stretch"),
           },
         ],
         menus: {
@@ -512,6 +544,30 @@
         default:
           return 0;
       }
+    }
+
+    setPosition({ VEC }, util) {
+      const v = Scratch.Cast.toFloat32Array(VEC);
+      util.target.setXY(
+        Scratch.Cast.toNumber(v[0]),
+        Scratch.Cast.toNumber(v[1])
+      );
+    }
+
+    pointTowards({ VEC }, util) {
+      const v = Scratch.Cast.toFloat32Array(VEC);
+      const target = util.target;
+
+      const dx = Scratch.Cast.toNumber(v[0]) - target.x;
+      const dy = Scratch.Cast.toNumber(v[1]) - target.y;
+      target.setDirection((Math.atan2(dx, dy) * 180) / Math.PI);
+    }
+
+    setStretch({ VEC }, util) {
+      const v = Scratch.Cast.toFloat32Array(VEC);
+      const setStretchBlock =
+        util.runtime.getOpcodeFunction("stretch_setStretch");
+      setStretchBlock?.({ X: v[0], Y: v[1] }, util);
     }
   }
 
