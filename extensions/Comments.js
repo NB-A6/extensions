@@ -122,8 +122,8 @@
       // no-op
     }
 
-    loop() {
-      return true;
+    loop(_args, util) {
+      util.startBranch(1, false);
     }
 
     reporter({ VALUE }) {
