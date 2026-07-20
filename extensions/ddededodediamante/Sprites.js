@@ -28,7 +28,7 @@
     let customHtml = null;
 
     if (value) {
-      const _target = _findSprite(value, false);
+      const _target = _findSprite(value, false, true);
       if (_target) {
         const costume = _target
           ?.getCostumes()
@@ -62,12 +62,14 @@
     return array;
   }
 
-  function _findSprite(id = "", onlyOriginals = false) {
-    if (!id || id === "") return null;
+  function _findSprite(idOrName = "", onlyOriginals = false, onlyId = false) {
+    if (!idOrName || idOrName === "") return null;
     const sprites = _allSprites(onlyOriginals);
-    const sprite = sprites.find((i) => i.id === id);
-    if (!sprite) return null;
-    return sprite;
+
+    let sprite = sprites.find(
+      (i) => i.id === idOrName || (!onlyId && i.getName() === idOrName)
+    );
+    return sprite || null;
   }
 
   class ddeSprites {
@@ -228,7 +230,7 @@
     }
 
     findSprite(id = "", onlyOriginals = false) {
-      return _findSprite(id, onlyOriginals);
+      return _findSprite(id, onlyOriginals, false);
     }
 
     spritesList() {
@@ -236,10 +238,7 @@
     }
 
     spritesListMenu() {
-      return this.allSprites(true).map((i) => ({
-        text: i.getName(),
-        value: i.id,
-      }));
+      return this.allSprites(true).map((i) => i.getName());
     }
 
     spritesAndObjectsListMenu() {
