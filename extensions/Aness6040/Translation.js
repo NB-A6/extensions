@@ -1,4 +1,3 @@
-//!format
 // Name: Translation (i18n)
 // ID: anessi18n
 // Description: Translate texts with i18n.
