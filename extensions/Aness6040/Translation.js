@@ -1,3 +1,4 @@
+//!format
 // Name: Translation (i18n)
 // ID: anessi18n
 // Description: Translate texts with i18n.
@@ -13,12 +14,12 @@
 
     const catalogs = Object.create(null);
 
-    let activeLocale = (navigator.language || navigator.userLanguage || "en").toString();
+    let activeLocale = (navigator.language || "en").toString();
     let fallbackLocale = "en";
     let missingKeyTemplate = "{key}";
 
     function ensureLocale(locale) {
-        if (!Object.hasOwn(catalogs, locale)) {
+        if (!Object.prototype.hasOwnProperty.call(catalogs, locale)) {
             catalogs[locale] = Object.create(null);
         }
         return catalogs[locale];
@@ -26,11 +27,11 @@
 
     function lookupRaw(key) {
         const active = catalogs[activeLocale];
-        if (active && Object.hasOwn(active, key)) return active[key];
+        if (active && Object.prototype.hasOwnProperty.call(active, key)) return active[key];
 
         if (fallbackLocale && fallbackLocale !== activeLocale) {
             const fb = catalogs[fallbackLocale];
-            if (fb && Object.hasOwn(fb, key)) return fb[key];
+            if (fb && Object.prototype.hasOwnProperty.call(fb, key)) return fb[key];
         }
         return null;
     }
@@ -51,7 +52,7 @@
         const map = Object.create(null);
         for (let i = 0; i < names.length; i++) map[names[i]] = values[i];
         return template.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, name) => {
-            return Object.hasOwn(map, name) ? String(map[name]) : match;
+            return Object.prototype.hasOwnProperty.call(map, name) ? String(map[name]) : match;
         });
     }
 
@@ -59,7 +60,7 @@
         getInfo() {
             return {
                 id: "anessi18n",
-                name: "Translation (i18n)",
+                name: Scratch.translate("Translation (i18n)"),
                 color1: "#5b3cc4",
                 color2: "#4b2fa3",
                 color3: "#2e1c6b",
@@ -67,20 +68,20 @@
                     {
                         opcode: "detectedBrowserLocale",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "device language",
+                        text: Scratch.translate("device language"),
                         duplicateOnDrag: true
                     },
                     {
                         opcode: "activeLocaleTag",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "current language",
+                        text: Scratch.translate("current language"),
                         duplicateOnDrag: true
                     },
-                    { blockType: Scratch.BlockType.LABEL, text: "Language Settings" },
+                    { blockType: Scratch.BlockType.LABEL, text: Scratch.translate("Language Settings") },
                     {
                         opcode: "setActiveLocale",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "switch language to [LOCALE]",
+                        text: Scratch.translate("switch language to [LOCALE]"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -92,7 +93,7 @@
                     {
                         opcode: "setFallbackLocale",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "use [LOCALE] as backup language",
+                        text: Scratch.translate("use [LOCALE] as backup language"),
                         arguments: {
                             LOCALE: { type: Scratch.ArgumentType.STRING, defaultValue: "en" }
                         },
@@ -101,16 +102,16 @@
                     {
                         opcode: "setMissingKeyTemplate",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "if a translation is missing, show [TEMPLATE]",
+                        text: Scratch.translate("if a translation is missing, show [TEMPLATE]"),
                         arguments: {
                             TEMPLATE: { type: Scratch.ArgumentType.STRING, defaultValue: "{key}" }
                         }
                     },
-                    { blockType: Scratch.BlockType.LABEL, text: "Reset" },
+                    { blockType: Scratch.BlockType.LABEL, text: Scratch.translate("Reset") },
                     {
                         opcode: "clearLocale",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "forget every translation for [LOCALE]",
+                        text: Scratch.translate("forget every translation for [LOCALE]"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -122,14 +123,14 @@
                     {
                         opcode: "clearAllCatalogs",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "forget every translation, for every language",
+                        text: Scratch.translate("forget every translation, for every language"),
                         switches: ["clearLocale"]
                     },
-                    { blockType: Scratch.BlockType.LABEL, text: "Edit Strings" },
+                    { blockType: Scratch.BlockType.LABEL, text: Scratch.translate("Edit Strings") },
                     {
                         opcode: "setString",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "in [LOCALE] make [KEY] mean [VALUE]",
+                        text: Scratch.translate("in [LOCALE] make [KEY] mean [VALUE]"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -143,7 +144,7 @@
                     {
                         opcode: "deleteString",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "in [LOCALE] forget [KEY]",
+                        text: Scratch.translate("in [LOCALE] forget [KEY]"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -156,7 +157,7 @@
                     {
                         opcode: "hasString",
                         blockType: Scratch.BlockType.BOOLEAN,
-                        text: "does [LOCALE] know [KEY]?",
+                        text: Scratch.translate("does [LOCALE] know [KEY]?"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -167,25 +168,25 @@
                     },
                     {
                         blockType: Scratch.BlockType.LABEL,
-                        text: "Examples"
+                        text: Scratch.translate("Examples")
                     },
                     {
                         opcode: "exampleCatalogGreetings",
                         blockType: Scratch.BlockType.OBJECT,
-                        text: "example for: greetings",
+                        text: Scratch.translate("example for: greetings"),
                         disableMonitor: true
                     },
                     {
                         opcode: "exampleCatalogItems",
                         blockType: Scratch.BlockType.OBJECT,
-                        text: "example for: items",
+                        text: Scratch.translate("example for: items"),
                         disableMonitor: true
                     },
-                    { blockType: Scratch.BlockType.LABEL, text: "Translate" },
+                    { blockType: Scratch.BlockType.LABEL, text: Scratch.translate("Translate") },
                     {
                         opcode: "translate",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY]",
+                        text: Scratch.translate("translate [KEY]"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "greeting.hello" }
@@ -194,7 +195,7 @@
                     {
                         opcode: "translateOrDefault",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY] or use [FALLBACK_TEXT] if missing",
+                        text: Scratch.translate("translate [KEY] or use [FALLBACK_TEXT] if missing"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "greeting.hello" },
@@ -204,7 +205,7 @@
                     {
                         opcode: "translatePlural",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY] for a count of [COUNT]",
+                        text: Scratch.translate("translate [KEY] for a count of [COUNT]"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "cart.items" },
@@ -214,7 +215,7 @@
                     {
                         opcode: "translateFormattedSimple",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY] filling in [ARGS]",
+                        text: Scratch.translate("translate [KEY] filling in [ARGS]"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "greeting.bye" },
@@ -225,7 +226,7 @@
                     {
                         opcode: "getCatalogJson",
                         blockType: Scratch.BlockType.OBJECT,
-                        text: "every translation for [LOCALE]",
+                        text: Scratch.translate("every translation for [LOCALE]"),
                         disableMonitor: true,
                         arguments: {
                             LOCALE: {
@@ -237,13 +238,13 @@
                     {
                         opcode: "getAllCatalogsJson",
                         blockType: Scratch.BlockType.OBJECT,
-                        text: "every translation, for every language",
+                        text: Scratch.translate("every translation, for every language"),
                         disableMonitor: true
                     },
                     {
                         opcode: "loadCatalogJson",
                         blockType: Scratch.BlockType.COMMAND,
-                        text: "load translations for [LOCALE] from [CATALOG_JSON]",
+                        text: Scratch.translate("load translations for [LOCALE] from [CATALOG_JSON]"),
                         arguments: {
                             LOCALE: {
                                 type: Scratch.ArgumentType.STRING,
@@ -259,7 +260,7 @@
                     {
                         opcode: "getCatalogKeys",
                         blockType: Scratch.BlockType.ARRAY,
-                        text: "translation keys in [LOCALE]",
+                        text: Scratch.translate("translation keys in [LOCALE]"),
                         disableMonitor: true,
                         arguments: {
                             LOCALE: {
@@ -271,7 +272,7 @@
                     {
                         opcode: "getCatalogValues",
                         blockType: Scratch.BlockType.ARRAY,
-                        text: "translated texts in [LOCALE]",
+                        text: Scratch.translate("translated texts in [LOCALE]"),
                         disableMonitor: true,
                         arguments: {
                             LOCALE: {
@@ -284,13 +285,13 @@
                     {
                         opcode: "translateFormatted",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY], filling in [ARGS]",
+                        text: Scratch.translate("translate [KEY], filling in [ARGS]"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "greeting.bye" },
                             ARGS: {
                                 type: Scratch.ArgumentType.EXTENDABLE,
-                                text: "[VALUE]",
+                                text: Scratch.translate("[VALUE]"),
                                 arguments: {
                                     VALUE: { type: Scratch.ArgumentType.STRING, defaultValue: "" }
                                 },
@@ -304,13 +305,13 @@
                     {
                         opcode: "translateNamed",
                         blockType: Scratch.BlockType.REPORTER,
-                        text: "translate [KEY], filling in named values [PAIRS]",
+                        text: Scratch.translate("translate [KEY], filling in named values [PAIRS]"),
                         disableMonitor: true,
                         arguments: {
                             KEY: { type: Scratch.ArgumentType.STRING, defaultValue: "greeting.hey" },
                             PAIRS: {
                                 type: Scratch.ArgumentType.EXTENDABLE,
-                                text: "[NAME] = [VALUE]",
+                                text: Scratch.translate("[NAME] = [VALUE]"),
                                 arguments: {
                                     NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "name" },
                                     VALUE: { type: Scratch.ArgumentType.STRING, defaultValue: "" }
@@ -327,7 +328,7 @@
         }
 
         detectedBrowserLocale() {
-            return (navigator.language || navigator.userLanguage || "en").toString();
+            return (navigator.language || "en").toString();
         }
 
         activeLocaleTag() {
@@ -398,7 +399,7 @@
         hasString(args) {
             const locale = Cast.toString(args.LOCALE);
             const catalog = catalogs[locale];
-            return !!(catalog && Object.hasOwn(catalog, Cast.toString(args.KEY)));
+            return !!(catalog && Object.prototype.hasOwnProperty.call(catalog, Cast.toString(args.KEY)));
         }
 
         translate(args) {
